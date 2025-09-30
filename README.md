@@ -1,5 +1,5 @@
 # Belajar Spring Dasar
 
-by EOS-PDN test SCM Poll
+by EOS-PDN
 
 # Trigger jenkins
