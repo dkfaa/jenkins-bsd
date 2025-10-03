@@ -6,16 +6,28 @@ pipeline {
     }
 
     stages {
-        stage('Name') {
+        stage('Build') {
             steps {
-                echo 'Dika Aditya Putra'
+                echo 'Hello Build'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Hello Test'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo 'Hello Deploy'
             }
         }
     }
 
     post {
         always {
-            echo "I will always say Hello Dika"
+            echo "I will always say Use Full IT"
         }
 
         success {
