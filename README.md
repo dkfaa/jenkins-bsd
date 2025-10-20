@@ -1,5 +1,5 @@
 # Belajar Spring Dasar
 
-by EOS-PDN
+by EOS-PDN Dika
 
 # Trigger jenkins
