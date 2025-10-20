@@ -1,7 +1,7 @@
 pipeline {
     agent {
         node {
-            label "linux-194 || linux-192"
+            label "linux-132 || linux-192"
         }
     }
 
