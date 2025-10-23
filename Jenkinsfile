@@ -5,11 +5,6 @@ pipeline {
         }
     }
 
-    environment {
-        // Ambil dari Jenkins Credentials (Secret Text)
-        DISCORD_WEBHOOK_URL = credentials('discord-webhook')
-    }
-
     stages {
         stage('Build') {
             steps {
@@ -38,14 +33,15 @@ pipeline {
 
     post {
         success {
-            // Discord Notifications
             script {
-                sh """#!/bin/bash
-                curl -H "Content-Type: application/json" \
-                -X POST \
-                -d "{"content": "✅ Jenkins Job *SUCCESS*: ${JOB_NAME} #${BUILD_NUMBER}"}"\
-                $DISCORD_WEBHOOK_URL
-                """
+                withCredentials([string(credentialsId: 'discord-webhook', variable: 'DISCORD_WEBHOOK_URL')]) {
+                    sh '''#!/bin/bash
+                    curl -H "Content-Type: application/json" \
+                        -X POST \
+                        -d "{\"content\": \"✅ Jenkins Job *SUCCESS*: ${JOB_NAME} #${BUILD_NUMBER}\"}" \
+                        $DISCORD_WEBHOOK_URL
+                    '''
+                }
             }
         }
     }
