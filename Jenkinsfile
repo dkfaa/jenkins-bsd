@@ -12,8 +12,15 @@ pipeline {
     stages {
         stage('Build') {
             steps {
+                // Discord Notification
+                sh """
+                    curl -H "Content-Type: application/json" \
+                    -X POST \
+                    -d '{"content": "🟡 Build STARTED: ${JOB_NAME} #${BUILD_NUMBER} 🚧"}' \
+                    $DISCORD_WEBHOOK_URL
+                """
                 echo 'Start Build'
-                sh "./mnw clean compile test-compile"
+                sh "./mvnw clean compile test-compile"
                 echo 'Finish Build'
             }
         }
