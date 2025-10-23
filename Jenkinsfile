@@ -37,12 +37,24 @@ pipeline {
 
     post {
         success {
+            // Discord Notification
             script {
-                echo "✅ Build sukses, mengirim notifikasi ke Discord..."
                 sh """
                     curl -H "Content-Type: application/json" \
                     -X POST \
-                    -d '{"content": "✅ Jenkins Job *SUCCESS*: ${JOB_NAME} #${BUILD_NUMBER}"}' \
+                    -d '{"content": "🟢 Jenkins Job SUCCESS: ${JOB_NAME} #${BUILD_NUMBER} berhasil 🚀"}' \
+                    $DISCORD_WEBHOOK_URL
+                """
+            }
+        }
+
+        failure {
+            // Discord Notification
+            script {
+                sh """
+                    curl -H "Content-Type: application/json" \
+                    -X POST \
+                    -d '{"content": "🔴 Build FAILED: ${JOB_NAME} #${BUILD_NUMBER} — cek log untuk detail ⚠️"}' \
                     $DISCORD_WEBHOOK_URL
                 """
             }
