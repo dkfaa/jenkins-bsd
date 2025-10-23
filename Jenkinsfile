@@ -88,14 +88,6 @@ pipeline {
                 }' \
                 $DISCORD_WEBHOOK_URL
                 """
-
-
-                sh """
-                    curl -H "Content-Type: application/json" \
-                    -X POST \
-                    -d '{"content": "🔴 Build FAILED: ${JOB_NAME} #${BUILD_NUMBER} — cek log untuk detail ⚠️"}' \
-                    $DISCORD_WEBHOOK_URL
-                """
             }
         }
     }
