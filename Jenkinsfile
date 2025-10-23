@@ -40,9 +40,10 @@ pipeline {
         success {
             // Discord Notifications
             script {
-                sh """
+                sh """#!/bin/bash
                 curl -H "Content-Type: application/json" \
-                -X POST -d '{"content": "✅ Jenkins Job *SUCCESS*: ${env.JOB_NAME} #${env.BUILD_NUMBER}"
+                -X POST \
+                -d "{"content": "✅ Jenkins Job *SUCCESS*: ${JOB_NAME} #${BUILD_NUMBER}"}"\
                 $DISCORD_WEBHOOK_URL
                 """
             }
