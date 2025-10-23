@@ -47,10 +47,22 @@ pipeline {
             // Discord Notification
             script {
                 sh """
-                    curl -H "Content-Type: application/json" \
-                    -X POST \
-                    -d '{"content": "🟢 Jenkins Job SUCCESS: ${JOB_NAME} #${BUILD_NUMBER} berhasil 🚀"}' \
-                    $DISCORD_WEBHOOK_URL
+                curl -H "Content-Type: application/json" \
+                -X POST \
+                -d '{
+                "embeds": [{
+                    "title": "🟢 Jenkins Build SUCCESS",
+                    "description": "Job **${JOB_NAME}** build #**${BUILD_NUMBER}** berhasil dijalankan! 🚀\\nLihat detail di [Build Logs](${BUILD_URL}).",
+                    "color": 3066993,
+                    "footer": {
+                    "text": "© 2025 Jenkins CI/CD"
+                    },
+                    "thumbnail": {
+                    "url": "https://www.jenkins.io/images/logos/jenkins/jenkins.png"
+                    }
+                }]
+                }' \
+                $DISCORD_WEBHOOK_URL
                 """
             }
         }
