@@ -12,19 +12,18 @@ pipeline {
 
     stages {
         stage('Build') {
-            steps {
-                script {
-                    sendDiscord("🚀 Build Started", "Job `${env.JOB_NAME}` build #${env.BUILD_NUMBER}` has started.\n<${env.BUILD_URL}>")
-
-                    for (int i = 0; i < 10; i++) {
-                        echo("Script ${i}")
-                    }
-                }
-
-                echo 'Start Build'
-                sh("./mvnw clean compile test-compile")
-                echo 'Finish Build'
+            script {
+                def payload = [
+                    embeds: [[
+                        title: "🚀 Build Started",
+                        description: "Job `${env.JOB_NAME}` build #${env.BUILD_NUMBER} has started.\n<${env.BUILD_URL}>",
+                        color: 3447003
+                    ]]
+                ]
+                writeJSON file: 'payload.json', json: payload, pretty: 4
+                sh "curl -H 'Content-Type: application/json' -X POST -d @payload.json $DISCORD_WEBHOOK_URL"
             }
+
         }
 
         stage('Test') {
