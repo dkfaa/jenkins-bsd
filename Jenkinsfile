@@ -31,24 +31,5 @@ pipeline {
         }
     }
 
-    post {
-        success {
-            script {
-                withCredentials([string(credentialsId: 'discord-webhook', variable: 'DISCORD_WEBHOOK_URL')]) {
-                    sh '''#!/bin/bash
-                    PAYLOAD=$(cat <<EOF
-    {
-    "content": "✅ Jenkins Job *SUCCESS*: ${JOB_NAME} #${BUILD_NUMBER}"
-    }
-    EOF
-    )
-                    curl -H "Content-Type: application/json" \
-                        -X POST \
-                        -d "$PAYLOAD" \
-                        "$DISCORD_WEBHOOK_URL"
-                    '''
-                }
-            }
-        }
-    }
+
 }
