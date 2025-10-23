@@ -5,6 +5,10 @@ pipeline {
         }
     }
 
+    environment {
+        DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1430773000881311754/yMwbYbm7g5gGVUyqKIHxgvuF_Ozu-segTIL-sYpYF0yxOdg3bs9c654fl80nDmjLkogy' // ganti dengan webhook kamu
+    }
+
     stages {
         stage('Build') {
             steps {
@@ -31,5 +35,17 @@ pipeline {
         }
     }
 
-
+    post {
+        success {
+            script {
+                echo "✅ Build sukses, mengirim notifikasi ke Discord..."
+                sh """
+                    curl -H "Content-Type: application/json" \
+                    -X POST \
+                    -d '{"content": "✅ Jenkins Job *SUCCESS*: ${JOB_NAME} #${BUILD_NUMBER}"}' \
+                    $DISCORD_WEBHOOK_URL
+                """
+            }
+        }
+    }
 }
