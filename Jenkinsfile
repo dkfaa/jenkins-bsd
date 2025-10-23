@@ -12,18 +12,32 @@ pipeline {
 
     stages {
         stage('Build') {
-            script {
-                def payload = [
-                    embeds: [[
-                        title: "🚀 Build Started",
-                        description: "Job `${env.JOB_NAME}` build #${env.BUILD_NUMBER} has started.\n<${env.BUILD_URL}>",
-                        color: 3447003
-                    ]]
-                ]
-                writeJSON file: 'payload.json', json: payload, pretty: 4
-                sh "curl -H 'Content-Type: application/json' -X POST -d @payload.json $DISCORD_WEBHOOK_URL"
-            }
+            steps {
+                script {
+                    def payload = [
+                        embeds: [[
+                            title: "🚀 Build Started",
+                            description: "Job `${env.JOB_NAME}` build #${env.BUILD_NUMBER} has started.\n<${env.BUILD_URL}>",
+                            color: 3447003
+                        ]]
+                    ]
 
+                    // Tulis ke file JSON
+                    writeJSON file: 'payload.json', json: payload, pretty: 4
+
+                    // Kirim ke Discord via curl
+                    sh """
+                    curl -H "Content-Type: application/json" \
+                         -X POST \
+                         -d @payload.json \
+                         "${env.DISCORD_WEBHOOK_URL}"
+                    """
+                }
+
+                echo 'Start Build'
+                sh "./mvnw clean compile test-compile"
+                echo 'Finish Build'
+            }
         }
 
         stage('Test') {
@@ -37,7 +51,7 @@ pipeline {
                 }
 
                 echo 'Start Test'
-                sh("./mvnw test")
+                sh "./mvnw test"
                 echo 'Finish Test'
             }
         }
@@ -118,20 +132,17 @@ def sendDiscord(title, message) {
         color = 3447003   // Biru (default)
     }
 
-    def payload = """
-    {
-      "embeds": [{
-        "title": "${title}",
-        "description": "${message}",
-        "color": ${color}
-      }]
-    }
-    """
+    def payload = [
+        embeds: [[
+            title: title,
+            description: message,
+            color: color
+        ]]
+    ]
+
+    // Tulis ke JSON file sementara
+    writeJSON file: 'payload_post.json', json: payload, pretty: 4
+    def jsonText = readFile('payload_post.json')
 
     sh """
-    curl -H "Content-Type: application/json" \
-         -X POST \
-         -d '${payload}' \
-         "${DISCORD_WEBHOOK_URL}"
-    """
-}
+    curl -H "Content-Type: application/json"
