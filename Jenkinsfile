@@ -42,8 +42,8 @@ pipeline {
             script {
                 sh """
                 curl -H "Content-Type: application/json" \
-                -X POST -d '{"content: "✅ Jenkins Job *SUCCESS*: ${env.JOB_NAME} #${env.BUILD_NUMBER}"
-                $DISCORD_WEBHOOK_URL}
+                -X POST -d '{"content": "✅ Jenkins Job *SUCCESS*: ${env.JOB_NAME} #${env.BUILD_NUMBER}"
+                $DISCORD_WEBHOOK_URL
                 """
             }
         }
