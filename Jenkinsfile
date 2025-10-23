@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1430773000881311754/yMwbYbm7g5gGVUyqKIHxgvuF_Ozu-segTIL-sYpYF0yxOdg3bs9c654fl80nDmjLkogy' // ganti dengan webhook kamu
+        DISCORD_WEBHOOK_URL = credentials('discord-webhook') // ganti dengan webhook kamu
     }
 
     stages {
