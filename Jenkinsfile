@@ -35,12 +35,12 @@ pipeline {
         success {
             script {
                 withCredentials([string(credentialsId: 'discord-webhook', variable: 'DISCORD_WEBHOOK_URL')]) {
-                    sh '''#!/bin/bash
+                    sh """#!/bin/bash
                     curl -H "Content-Type: application/json" \
                         -X POST \
                         -d "{\"content\": \"✅ Jenkins Job *SUCCESS*: ${JOB_NAME} #${BUILD_NUMBER}\"}" \
                         $DISCORD_WEBHOOK_URL
-                    '''
+                    """
                 }
             }
         }
