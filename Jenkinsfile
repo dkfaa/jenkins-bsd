@@ -55,7 +55,7 @@ pipeline {
                     "description": "Job **${JOB_NAME}** build #**${BUILD_NUMBER}** berhasil dijalankan! 🚀\\nLihat detail di [Build Logs](${BUILD_URL}).",
                     "color": 3066993,
                     "footer": {
-                    "text": "© 2025 Jenkins CI/CD"
+                    "text": "© 2025 QA Jenkins CI/CD"
                     },
                     "thumbnail": {
                     "url": "https://www.jenkins.io/images/logos/jenkins/jenkins.png"
@@ -70,6 +70,26 @@ pipeline {
         failure {
             // Discord Notification
             script {
+                sh """
+                curl -H "Content-Type: application/json" \
+                -X POST \
+                -d '{
+                "embeds": [{
+                    "title": "🔴 Jenkins Build FAILED",
+                    "description": "Job **${JOB_NAME}** build #**${BUILD_NUMBER}** mengalami error⚠️ \\nLihat detail di [Build Logs](${BUILD_URL}).",
+                    "color": 3066993,
+                    "footer": {
+                    "text": "© 2025 QA Jenkins CI/CD"
+                    },
+                    "thumbnail": {
+                    "url": "https://www.jenkins.io/images/logos/jenkins/jenkins.png"
+                    }
+                }]
+                }' \
+                $DISCORD_WEBHOOK_URL
+                """
+
+
                 sh """
                     curl -H "Content-Type: application/json" \
                     -X POST \
